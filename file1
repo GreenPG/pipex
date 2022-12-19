@@ -1,0 +1,8 @@
+total 48
+-rw-r--r-- 1 gpasquet 2022_angouleme  1393 Dec 18 13:33 Makefile
+-rwxr-xr-x 1 gpasquet 2022_angouleme   446 Dec 19 17:06 file1
+-rw-r--r-- 1 gpasquet 2022_angouleme     0 Dec 18 13:07 file2
+drwxr-xr-x 2 gpasquet 2022_angouleme  4096 Dec 19 17:02 include
+drwxr-xr-x 4 gpasquet 2022_angouleme  4096 Dec 18 13:11 libft
+-rwxr-xr-x 1 gpasquet 2022_angouleme 26848 Dec 19 17:07 pipex
+drwxr-xr-x 2 gpasquet 2022_angouleme  4096 Dec 19 17:07 src

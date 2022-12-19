@@ -6,7 +6,7 @@
 /*   By: gpasquet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/18 12:04:26 by gpasquet          #+#    #+#             */
-/*   Updated: 2022/12/18 14:13:22 by gpasquet         ###   ########.fr       */
+/*   Updated: 2022/12/19 10:44:19 by gpasquet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,19 +50,19 @@ void	get_cmds(char** av, t_input	*input)
 		ft_printf("Error in ft_split");
 		return ;
 	}
-	input->cmd1 = ft_strdup(splitted_input1[0]);
+	input->cmd1 = ft_strjoin(input->cmd1, splitted_input1[0]);
 	if (!input->cmd1)
 		return ;
-	input->cmd2 = ft_strdup(splitted_input2[0]);
-	if (!input->cmd1)
+	input->cmd2 = ft_strjoin(input->cmd2, splitted_input2[0]);
+	if (!input->cmd2)
 		return ;
-	input->args1 = get_args(splitted_input1 + 1);
+	input->args1 = get_args(splitted_input1);
 	if (!input->args1)
 	{
 		free_struct(input);
 		return ;
 	}
-	input->args2 = get_args(splitted_input2 + 1);
+	input->args2 = get_args(splitted_input2);
 	if (!input->args1)
 	{
 		free_struct(input);

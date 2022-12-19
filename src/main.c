@@ -6,7 +6,7 @@
 /*   By: gpasquet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/18 11:57:37 by gpasquet          #+#    #+#             */
-/*   Updated: 2022/12/18 13:34:19 by gpasquet         ###   ########.fr       */
+/*   Updated: 2022/12/19 17:07:11 by gpasquet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,30 +15,45 @@
 int	main(int ac, char **av)
 {
 	t_input	*input;	
-	int i;
+	int		pid;
+	int		pipe_fd[2];
+	int		err;
+	int		file;
 
 	if (ac < 2)
 		return (0);
 	input = parsing(av + 1);
 	if (!input)
 		return (0);
-	ft_printf("%s\n", input->file1);
-	ft_printf("%s\n", input->cmd1);
-	i = 0;
-	while (input->args1[i])
+	if (pipe(pipe_fd) == -1)
 	{
-		ft_printf("%s ", input->args1[i]);
-		i++;
+		free_struct(input);
+		perror("Pipe :");
+		return (0);
 	}
-	ft_printf("\n");
-	i = 0;
-	while (input->args2[i])
+	pid = fork();
+	if (pid == -1)
 	{
-		ft_printf("%s ", input->args2[i]);
-		i++;
+		free_struct(input);
+		perror("Error :");
+		return (0);
 	}
-	ft_printf("\n");
-	ft_printf("%s\n", input->cmd2);
-	ft_printf("%s\n", input->file2);
-	free_struct(input);
+	if (pid == 0)
+	{
+		file = open(input->file1, O_WRONLY | O_CREAT, 0777);
+		dup2(file, 1);
+		close(file);
+		err = execve(input->cmd1, input->args1, NULL);
+		if (err == -1)
+		{
+			free_struct(input);
+			perror(NULL);
+			return (0);
+		}
+	}
+	else
+	{
+		free_struct(input);
+	}
+	return (0);
 }

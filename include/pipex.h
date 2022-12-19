@@ -6,7 +6,7 @@
 /*   By: gpasquet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/18 11:58:48 by gpasquet          #+#    #+#             */
-/*   Updated: 2022/12/18 13:56:43 by gpasquet         ###   ########.fr       */
+/*   Updated: 2022/12/19 16:58:03 by gpasquet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,10 @@
 
 # include <unistd.h>
 # include "../libft/include/libft.h"
+# include <sys/wait.h>
+# include <errno.h>
+# include <stdio.h>
+# include <fcntl.h>
 
 typedef struct s_input {
 	char	*file1;
