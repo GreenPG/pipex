@@ -6,7 +6,7 @@
 /*   By: gpasquet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/18 12:04:26 by gpasquet          #+#    #+#             */
-/*   Updated: 2022/12/19 10:44:19 by gpasquet         ###   ########.fr       */
+/*   Updated: 2022/12/20 15:57:16 by gpasquet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,8 @@ t_input	*parsing(char **av)
 	input->file1 = ft_strdup(av[0]);
 	input->file2 = ft_strdup(av[3]);
 	get_cmds(av, input);
-	if (!input->file1 || !input->file2 || !input->cmd1 || !input->cmd2 || !input->args1 || !input->args2)
+	if (!input->file1 || !input->file2 || !input->cmd1 || !input->cmd2
+		|| !input->args1 || !input->args2)
 	{
 		free_struct(input);
 		return (NULL);
@@ -33,43 +34,50 @@ t_input	*parsing(char **av)
 	return (input);
 }
 
-void	get_cmds(char** av, t_input	*input)
+void	get_cmds(char **av, t_input	*input)
 {
-	char	**splitted_input1;
-	char	**splitted_input2;
+	char	***splitted_input;
+	char	*bin;
 
-	splitted_input1 = ft_split(av[1], ' ');
-	if (!splitted_input1)
+	bin = "/bin/";
+	splitted_input = get_splitted_input(av);
+	if (!splitted_input)
 	{
 		ft_printf("Error in ft_split");
 		return ;
 	}
-	splitted_input2 = ft_split(av[2], ' ');
-	if (!splitted_input1)
+	input->cmd1 = ft_strjoin(bin, splitted_input[0][0]);
+	input->cmd2 = ft_strjoin(bin, splitted_input[1][0]);
+	input->args1 = get_args(splitted_input[0]);
+	input->args2 = get_args(splitted_input[1]);
+	if (!input->cmd1 || !input->cmd2 || !input->args1 || !input->args2)
 	{
+		free_struct(input);
+		return ;
+	}
+	free_tab_tab(splitted_input);
+}
+
+char	***get_splitted_input(char **av)
+{
+	char	***splitted_input;
+
+	splitted_input = ft_calloc(3, sizeof(*splitted_input));
+	splitted_input[0] = ft_split(av[1], ' ');
+	if (!splitted_input[0])
+	{
+		free(splitted_input);
 		ft_printf("Error in ft_split");
-		return ;
+		return (NULL);
 	}
-	input->cmd1 = ft_strjoin(input->cmd1, splitted_input1[0]);
-	if (!input->cmd1)
-		return ;
-	input->cmd2 = ft_strjoin(input->cmd2, splitted_input2[0]);
-	if (!input->cmd2)
-		return ;
-	input->args1 = get_args(splitted_input1);
-	if (!input->args1)
+	splitted_input[1] = ft_split(av[2], ' ');
+	if (!splitted_input[1])
 	{
-		free_struct(input);
-		return ;
+		free_tab_tab(splitted_input);
+		ft_printf("Error in ft_split");
+		return (NULL);
 	}
-	input->args2 = get_args(splitted_input2);
-	if (!input->args1)
-	{
-		free_struct(input);
-		return ;
-	}
-	free_tab(splitted_input1);
-	free_tab(splitted_input2);
+	return (splitted_input);
 }
 
 char	**get_args(char	**splitted_input)

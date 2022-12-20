@@ -6,7 +6,7 @@
 #    By: gpasquet <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/12/16 13:30:55 by gpasquet          #+#    #+#              #
-#    Updated: 2022/12/18 13:33:25 by gpasquet         ###   ########.fr        #
+#    Updated: 2022/12/20 16:40:44 by gpasquet         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,16 +18,17 @@ NAME = pipex
 
 LIBFT = libft/libft.a
 
-SRC =	src/main.c \
+SRC =	src/pipex.c \
 		src/utils.c \
 		src/parsing.c \
 		src/free_functions.c \
-		src/struct_utils.c
+		src/struct_utils.c \
+		src/child_functions.c
 
 OBJS = ${SRC:.c=.o}
 
 .c.o:
-	${CC} ${CFLAGS} -c $< -o ${<:.c=.o}
+	${CC} ${CFLAGS}  -c $< -o ${<:.c=.o}
 
 all:	$(NAME)
 

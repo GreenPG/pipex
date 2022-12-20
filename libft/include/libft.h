@@ -6,7 +6,7 @@
 /*   By: gpasquet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/27 12:51:33 by gpasquet          #+#    #+#             */
-/*   Updated: 2022/12/16 11:01:11 by gpasquet         ###   ########.fr       */
+/*   Updated: 2022/12/20 15:33:32 by gpasquet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ char			*ft_strrchr(const char *s, int c);
 char			*ft_strnstr(const char *big, const char *litlle, size_t len);
 char			*ft_strdup(const char *s);
 char			*ft_substr(char const *s, unsigned int start, size_t len);
-char			*ft_strjoin(char const *s1, char const *s2);
+char			*ft_strjoin(const char*s1, char const *s2);
 char			*ft_strtrim(char const *s1, char const *set);
 char			*ft_itoa(int n);
 char			*ft_strmapi(char const *s, char (*f)(unsigned int, char));
