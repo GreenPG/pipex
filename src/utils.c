@@ -6,7 +6,7 @@
 /*   By: gpasquet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/18 12:19:38 by gpasquet          #+#    #+#             */
-/*   Updated: 2022/12/19 10:31:48 by gpasquet         ###   ########.fr       */
+/*   Updated: 2022/12/21 11:27:14 by gpasquet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,4 +20,11 @@ size_t	strtab_len(char **str_tab)
 	while (str_tab[i])
 		i++;
 	return (i);
+}
+
+void	error_function(t_input *input, char *message)
+{
+	free_struct(input);
+	perror(message);
+	exit(1);
 }
