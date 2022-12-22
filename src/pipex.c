@@ -6,20 +6,18 @@
 /*   By: gpasquet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/18 11:57:37 by gpasquet          #+#    #+#             */
-/*   Updated: 2022/12/21 17:14:22 by gpasquet         ###   ########.fr       */
+/*   Updated: 2022/12/22 16:19:24 by gpasquet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/pipex.h"
+#include <stdlib.h>
 
 int	init_pipe(int *pipefd, t_input *input)
 {
 	int	err;
 	int	pid;
 
-	err = access(input->file1, R_OK);
-	if (err == -1)
-		error_function(input, "Access");
 	err = pipe(pipefd);
 	if (err == -1)
 		error_function(input, "Pipe");
@@ -29,41 +27,51 @@ int	init_pipe(int *pipefd, t_input *input)
 	return (pid);
 }
 
-void	parent_process(int *pipefd, t_input *input, char *const *envp)
+void	parent_process(int *pipefd, t_input *input, char *const *envp, int *pid)
 {
-	int	pid;
+	int	status;
 
-	pid = fork();
-	if (pid == -1)
+	pid[1] = fork();
+	if (pid[1] == -1)
 		error_function(input, "Fork");
-	if (pid == 0)
+	if (pid[1] == 0)
 		second_cmd(input, pipefd, envp);
 	else
 	{
-		wait(NULL);
 		close(pipefd[0]);
 		close(pipefd[1]);
 		free_struct(input);
+		waitpid(pid[0], &status, 0);
+		waitpid(pid[1], &status, 0);
+		if (WIFEXITED(status))
+			status = WEXITSTATUS(status);
+		exit(status);
 	}
 }
 
 int	main(int ac, char **av, char *const *envp)
 {
 	t_input	*input;
-	int		pid;
+	int		pid[2];
 	int		pipefd[2];
 
-	if (ac < 5)
-		return (0);
+	if (ac != 5)
+	{
+		write(2, "pipex: incorrect number of arguments\n", 37);
+		return (EXIT_FAILURE);
+	}
 	input = parsing(av + 1, envp);
-	if (!input)
-		return (0);
-	pid = init_pipe(pipefd, input);
-	if (pid == -1)
+	if (!input || !input->file1 || !input->file2 || !input->args1
+		|| !input->args2)
+	{
+		free_struct(input);
+		exit(EXIT_FAILURE);
+	}
+	pid[0] = init_pipe(pipefd, input);
+	if (pid[0] == -1)
 		error_function(input, NULL);
-	if (pid == 0)
+	if (pid[0] == 0)
 		first_cmd(input, pipefd, envp);
 	else
-		parent_process(pipefd, input, envp);
-	return (0);
+		parent_process(pipefd, input, envp, pid);
 }

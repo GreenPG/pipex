@@ -6,7 +6,7 @@
 /*   By: gpasquet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/18 11:58:48 by gpasquet          #+#    #+#             */
-/*   Updated: 2022/12/21 17:11:43 by gpasquet         ###   ########.fr       */
+/*   Updated: 2022/12/22 16:16:28 by gpasquet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@
 # include <sys/wait.h>
 # include <errno.h>
 # include <stdio.h>
+# include <stdlib.h>
 # include <fcntl.h>
 
 typedef struct s_input {
@@ -32,12 +33,14 @@ typedef struct s_input {
 //	pipex.c
 int		main(int ac, char **av, char *const *envp);
 int		init_pipe(int *pipefd, t_input *input);
-void	parent_process(int *pipefd, t_input *input, char *const *envp);
+void	parent_process(int *pipefd, t_input *input, char *const *envp,
+			int *pid);
 
 //	parsing.c
 t_input	*parsing(char **av, char *const *envp);
 char	*get_cmds(char *av, char *const *envp);
 char	**get_paths(char *const *envp);
+char	**get_splitted_envp(char *const *envp);
 
 //	utils.c
 size_t	strtab_len(char **tab_str);
