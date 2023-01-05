@@ -6,7 +6,7 @@
 #    By: gpasquet <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/12/16 13:30:55 by gpasquet          #+#    #+#              #
-#    Updated: 2022/12/20 16:40:44 by gpasquet         ###   ########.fr        #
+#    Updated: 2023/01/05 15:53:28 by gpasquet         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,14 +18,23 @@ NAME = pipex
 
 LIBFT = libft/libft.a
 
-SRC =	src/pipex.c \
-		src/utils.c \
-		src/parsing.c \
-		src/free_functions.c \
-		src/struct_utils.c \
-		src/child_functions.c
+SRC =	mandatory/src/pipex.c \
+		mandatory/src/utils.c \
+		mandatory/src/parsing.c \
+		mandatory/src/free_functions.c \
+		mandatory/src/struct_utils.c \
+		mandatory/src/child_functions.c
+
+BONUS = bonus/src/pipex_bonus.c \
+		bonus/src/utils_bonus.c \
+		bonus/src/parsing_bonus.c \
+		bonus/src/free_functions_bonus.c \
+		bonus/src/struct_utils_bonus.c \
+		bonus/src/child_functions_bonus.c
 
 OBJS = ${SRC:.c=.o}
+
+OBJS_BONUS = ${BONUS:.c=.o}
 
 .c.o:
 	${CC} ${CFLAGS}  -c $< -o ${<:.c=.o}
@@ -38,8 +47,12 @@ $(NAME):	$(LIBFT) $(OBJS)
 ${LIBFT}:
 	make -C libft
 
+bonus:	$(LIBFT) $(OBJS_BONUS)
+	${CC} ${CFLAGS} ${OBJS_BONUS} ${LIBFT} -o ${NAME}
+
+
 clean:
-	${RM} ${OBJS}
+	${RM} ${OBJS} ${OBJS_BONUS}
 	make clean -C libft
 
 fclean: clean

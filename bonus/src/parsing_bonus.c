@@ -1,39 +1,41 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parsing.c                                          :+:      :+:    :+:   */
+/*   parsing_bonus.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: gpasquet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/18 12:04:26 by gpasquet          #+#    #+#             */
-/*   Updated: 2022/12/22 16:19:09 by gpasquet         ###   ########.fr       */
+/*   Updated: 2023/01/05 16:28:28 by gpasquet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/pipex.h"
+#include "../include/pipex_bonus.h"
 #include <unistd.h>
 
 t_input	*parsing(char **av, char *const *envp)
 {
 	t_input	*input;
+	int		i;
 
 	input = init_struct();
 	input->file1 = ft_strdup(av[0]);
 	input->file2 = ft_strdup(av[3]);
-	input->args1 = ft_split(av[1], ' ');
-	input->args2 = ft_split(av[2], ' ');
-	if (input->args1[0][0] == '/')
-		input->cmd1 = ft_strdup(input->args1[0]);
-	else
-		input->cmd1 = get_cmds(input->args1[0], envp);
-	if (input->args2[0][0] == '/')
-		input->cmd2 = ft_strdup(input->args2[0]);
-	else
-		input->cmd2 = get_cmds(input->args2[0], envp);
-	if (!input->cmd1 || !input->cmd2)
+	input->args = malloc(sizeof(char **) * strtab_len(av) + 1);
+	i = 1;
+	while (i < strtab_len(av) - 1)
 	{
-		free_struct(input);
-		exit(127);
+		input->args[i] = ft_split(av[i], ' ');
+		i++;
+	}
+	input->args[i] = 0;
+	i = 0;
+	while (input->args[i])
+	{
+		if (input->args[i][0][0] == '/')
+			input->cmd[i] = ft_strdup(input->args[i][0]);
+		else
+			input->cmd[i] = get_cmds(input->args[i][0], envp);
 	}
 	return (input);
 }
@@ -57,7 +59,7 @@ char	*get_cmds(char *av, char *const *envp)
 		free(cmd);
 		i++;
 	}
-	write(2, "pipex: command not found: ", 26);
+	ft_putstr_fd("pipex: command not found: ", 2);
 	ft_putstr_fd(av, 2);
 	write(2, "\n", 1);
 	free_tab(paths);

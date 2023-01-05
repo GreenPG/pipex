@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   child_functions.c                                  :+:      :+:    :+:   */
+/*   child_functions_bonus.c                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: gpasquet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/20 16:32:52 by gpasquet          #+#    #+#             */
-/*   Updated: 2022/12/22 16:06:05 by gpasquet         ###   ########.fr       */
+/*   Updated: 2023/01/05 16:45:39 by gpasquet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/pipex.h"
+#include "../include/pipex_bonus.h"
 
 void	first_cmd(t_input *input, int *pipefd, char *const *envp)
 {
@@ -20,23 +20,22 @@ void	first_cmd(t_input *input, int *pipefd, char *const *envp)
 	close(pipefd[0]);
 	infile = open(input->file1, O_RDONLY);
 	if (infile == -1)
-	{
-		write(2, "pipex: no such file or directory: ", 34);
-		ft_putstr_fd(input->file1, 2);
-		write(2, "\n", 1);
-		free_struct(input);
-		exit(EXIT_FAILURE);
-	}
+		no_file_function(input, 1);
 	dup2(infile, 0);
 	close(infile);
 	dup2(pipefd[1], 1);
 	close(pipefd[1]);
-	err = execve(input->cmd1, input->args1, envp);
-	if (err == -1)
+	if (input->cmd1)
 	{
-		free_struct(input);
-		exit(EXIT_FAILURE);
+		err = execve(input->cmd1, input->args1, envp);
+		if (err == -1)
+		{
+			free_struct(input);
+			exit(EXIT_FAILURE);
+		}
 	}
+	else
+		exit(127);
 }
 
 void	second_cmd(t_input *input, int *pipefd, char *const *envp)
@@ -49,19 +48,21 @@ void	second_cmd(t_input *input, int *pipefd, char *const *envp)
 	close(pipefd[0]);
 	outfile = open(input->file2, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (outfile == -1)
-	{
-		write(2, "pipex: no such file or directory: ", 34);
-		ft_putstr_fd(input->file2, 2);
-		write(2, "\n", 1);
-		free_struct(input);
-		exit(EXIT_FAILURE);
-	}
+		no_file_function(input, 1);
 	dup2(outfile, 1);
 	close(outfile);
-	err = execve(input->cmd2, input->args2, envp);
-	if (err == -1)
+	if (input->cmd2)
 	{
+		err = execve(input->cmd2, input->args2, envp);
+		if (err == -1)
+		{
+			free_struct(input);
+			exit(EXIT_FAILURE);
+		}
+	}
+	else
+	{	
 		free_struct(input);
-		exit(EXIT_FAILURE);
+		exit(127);
 	}
 }

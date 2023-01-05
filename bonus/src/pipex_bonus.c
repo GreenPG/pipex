@@ -1,30 +1,46 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pipex.c                                            :+:      :+:    :+:   */
+/*   pipex_bonus.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: gpasquet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/18 11:57:37 by gpasquet          #+#    #+#             */
-/*   Updated: 2022/12/22 16:19:24 by gpasquet         ###   ########.fr       */
+/*   Updated: 2023/01/05 17:27:04 by gpasquet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../include/pipex.h"
-#include <stdlib.h>
+#include "../include/pipex_bonus.h"
 
-int	init_pipe(int *pipefd, t_input *input)
+int	init_pipe(t_input *input, int *pid, int cmd_nb, char *const *envp)
 {
+	int	pipefd_in[2];
+	int	pipefd_out[2];
 	int	err;
-	int	pid;
+	int	i;
 
-	err = pipe(pipefd);
+	err = pipe(pipefd_out);
 	if (err == -1)
 		error_function(input, "Pipe");
-	pid = fork();
-	if (pid == -1)
-		error_function(input, "Fork");
-	return (pid);
+	first_cmd(input, pipefd_out, envp);
+	i = 0;
+	while (i < cmd_nb)
+	{
+		err = pipe(pipefd_in);
+		if (err == -1)
+			error_function(input, "Pipe");
+		pid[i] = fork();
+		if (pid[i] == -1)
+			error_function(input, "Fork");
+		if (pid == 0)
+			child_function(input, pipefd, envp);
+		else
+		{
+			pipefd_out[0] = pipefd_in[0];
+			pipefd_out[1] = pipefd_in[1];
+			i++;
+		}
+	}
 }
 
 void	parent_process(int *pipefd, t_input *input, char *const *envp, int *pid)
@@ -41,7 +57,6 @@ void	parent_process(int *pipefd, t_input *input, char *const *envp, int *pid)
 		close(pipefd[0]);
 		close(pipefd[1]);
 		free_struct(input);
-		waitpid(pid[0], &status, 0);
 		waitpid(pid[1], &status, 0);
 		if (WIFEXITED(status))
 			status = WEXITSTATUS(status);
@@ -52,26 +67,24 @@ void	parent_process(int *pipefd, t_input *input, char *const *envp, int *pid)
 int	main(int ac, char **av, char *const *envp)
 {
 	t_input	*input;
-	int		pid[2];
-	int		pipefd[2];
+	int		*pid;
 
-	if (ac != 5)
+	if (ac < 5)
 	{
 		write(2, "pipex: incorrect number of arguments\n", 37);
 		return (EXIT_FAILURE);
 	}
 	input = parsing(av + 1, envp);
-	if (!input || !input->file1 || !input->file2 || !input->args1
-		|| !input->args2)
+	if (!input || !input->args || !input->args)
 	{
 		free_struct(input);
 		exit(EXIT_FAILURE);
 	}
-	pid[0] = init_pipe(pipefd, input);
-	if (pid[0] == -1)
-		error_function(input, NULL);
-	if (pid[0] == 0)
-		first_cmd(input, pipefd, envp);
-	else
-		parent_process(pipefd, input, envp, pid);
+	pid = malloc(sizeof(int) * (ac -3));
+	if (!pid)
+	{
+		free_struct(input);
+		exit(EXIT_FAILURE);
+	}
+	init_pipe(input, pid, ac - 3, envp);
 }
