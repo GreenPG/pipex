@@ -6,7 +6,7 @@
 /*   By: gpasquet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/18 11:57:37 by gpasquet          #+#    #+#             */
-/*   Updated: 2023/01/05 17:27:04 by gpasquet         ###   ########.fr       */
+/*   Updated: 2023/01/06 17:19:48 by gpasquet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ int	init_pipe(t_input *input, int *pid, int cmd_nb, char *const *envp)
 		error_function(input, "Pipe");
 	first_cmd(input, pipefd_out, envp);
 	i = 0;
-	while (i < cmd_nb)
+	while (i < cmd_nb -1)
 	{
 		err = pipe(pipefd_in);
 		if (err == -1)

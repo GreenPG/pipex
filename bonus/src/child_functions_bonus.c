@@ -6,11 +6,13 @@
 /*   By: gpasquet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/20 16:32:52 by gpasquet          #+#    #+#             */
-/*   Updated: 2023/01/05 16:45:39 by gpasquet         ###   ########.fr       */
+/*   Updated: 2023/01/06 16:33:39 by gpasquet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/pipex_bonus.h"
+#include <stdio.h>
+#include <stdlib.h>
 
 void	first_cmd(t_input *input, int *pipefd, char *const *envp)
 {
@@ -20,14 +22,20 @@ void	first_cmd(t_input *input, int *pipefd, char *const *envp)
 	close(pipefd[0]);
 	infile = open(input->file1, O_RDONLY);
 	if (infile == -1)
-		no_file_function(input, 1);
+	{
+		close(pipefd[1]);
+		if (errno == 2)
+			no_file_function(input);
+		if (errno == 13)
+			no_permission_function(input);
+	}
 	dup2(infile, 0);
 	close(infile);
 	dup2(pipefd[1], 1);
 	close(pipefd[1]);
-	if (input->cmd1)
+	if (input->cmd[0])
 	{
-		err = execve(input->cmd1, input->args1, envp);
+		err = execve(input->cmd[0], input->args[0], envp);
 		if (err == -1)
 		{
 			free_struct(input);
@@ -38,22 +46,28 @@ void	first_cmd(t_input *input, int *pipefd, char *const *envp)
 		exit(127);
 }
 
-void	second_cmd(t_input *input, int *pipefd, char *const *envp)
+void	last_cmd(t_input *input, int *pipefd, char *const *envp)
 {
 	int	outfile;
 	int	err;
+	int	cmd_nb;
 
+	cmd_nb = strtab_len(input->cmd) - 1;
 	close(pipefd[1]);
 	dup2(pipefd[0], 0);
 	close(pipefd[0]);
 	outfile = open(input->file2, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (outfile == -1)
-		no_file_function(input, 1);
+	{
+		free_struct(input);
+		perror(NULL);
+		exit(EXIT_FAILURE);
+	}
 	dup2(outfile, 1);
 	close(outfile);
-	if (input->cmd2)
+	if (input->cmd[cmd_nb])
 	{
-		err = execve(input->cmd2, input->args2, envp);
+		err = execve(input->cmd[cmd_nb], input->args[cmd_nb], envp);
 		if (err == -1)
 		{
 			free_struct(input);
@@ -62,6 +76,32 @@ void	second_cmd(t_input *input, int *pipefd, char *const *envp)
 	}
 	else
 	{	
+		free_struct(input);
+		exit(127);
+	}
+}
+
+void	child_cmd(t_input *input, int *pipefd_in, int *pipefd_out, char *const *envp, int cmd_nb)
+{
+	int	err;
+
+	close(pipefd_in[1]);
+	close(pipefd_out[0]);
+	dup2(pipefd_in[0], 0);
+	close(pipefd_in[0]);
+	dup2(pipefd_out[1], 1);
+	close(pipefd_out[1]);
+	if (input->cmd[cmd_nb])
+	{
+		err = execve(input->cmd[cmd_nb], input->args[cmd_nb], envp);
+		if (err == -1)
+		{
+			free_struct(input);
+			exit(EXIT_FAILURE);
+		}
+	}
+	else
+	{
 		free_struct(input);
 		exit(127);
 	}

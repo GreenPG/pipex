@@ -6,7 +6,7 @@
 /*   By: gpasquet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/18 12:27:03 by gpasquet          #+#    #+#             */
-/*   Updated: 2023/01/05 15:55:47 by gpasquet         ###   ########.fr       */
+/*   Updated: 2023/01/06 13:10:53 by gpasquet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,14 +31,10 @@ void	free_struct(t_input *input)
 		free(input->file1);
 	if (input->file2)
 		free(input->file2);
-	if (input->cmd1)
-		free(input->cmd1);
-	if (input->cmd2)
-		free(input->cmd2);
-	if (input->args1)
-		free_tab(input->args1);
-	if (input->args2)
-		free_tab(input->args2);
+	if (input->cmd)
+		free_tab(input->cmd);
+	if (input->args)
+		free_tab_tab(input->args);
 	free(input);
 }
 

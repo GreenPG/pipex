@@ -6,7 +6,7 @@
 /*   By: gpasquet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/18 11:58:48 by gpasquet          #+#    #+#             */
-/*   Updated: 2023/01/05 14:54:57 by gpasquet         ###   ########.fr       */
+/*   Updated: 2023/01/06 15:31:56 by gpasquet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,9 @@ char	**get_splitted_envp(char *const *envp);
 //	utils.c
 size_t	strtab_len(char **tab_str);
 void	error_function(t_input *input, char *message);
-void	no_file_function(t_input *input, int nb);
+void	no_file_function(t_input *input);
+void	no_permission_function(t_input *input);
+
 //	free_functions.c
 void	free_tab(char **str_tab);
 void	free_struct(t_input *input);
