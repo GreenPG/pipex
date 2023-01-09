@@ -6,12 +6,11 @@
 /*   By: gpasquet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/18 12:04:26 by gpasquet          #+#    #+#             */
-/*   Updated: 2023/01/06 10:56:53 by gpasquet         ###   ########.fr       */
+/*   Updated: 2023/01/09 16:06:01 by gpasquet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/pipex.h"
-#include <unistd.h>
 
 t_input	*parsing(char **av, char *const *envp)
 {
@@ -52,9 +51,6 @@ char	*get_cmds(char *av, char *const *envp)
 		free(cmd);
 		i++;
 	}
-	ft_putstr_fd("pipex: command not found: ", 2);
-	ft_putstr_fd(av, 2);
-	write(2, "\n", 1);
 	free_tab(paths);
 	return (NULL);
 }
