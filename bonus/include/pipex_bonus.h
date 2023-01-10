@@ -6,7 +6,7 @@
 /*   By: gpasquet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/18 11:58:48 by gpasquet          #+#    #+#             */
-/*   Updated: 2023/01/09 16:40:32 by gpasquet         ###   ########.fr       */
+/*   Updated: 2023/01/10 15:03:23 by gpasquet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,7 @@
 
 # include <unistd.h>
 # include "../../libft/include/libft.h"
+# include "../../libft/include/get_next_line.h"
 # include <sys/wait.h>
 # include <errno.h>
 # include <stdio.h>
@@ -44,7 +45,7 @@ char	**get_splitted_envp(char *const *envp);
 
 //	utils_bonus.c
 size_t	strtab_len(char **tab_str);
-
+int		check_param_nb(int ac, char **av);
 //	error_functions.c
 void	open_error(t_input *input, int pipefd[2]);
 void	error_function(t_input *input, char *message);
@@ -67,5 +68,7 @@ void	first_cmd(t_input *input, int *pipefd, char *const *envp);
 void	last_cmd(t_input *input, int *pipefd, char *const *envp);
 void	child_cmd(t_input *input, int pipesfd[2][2], char *const *envp,
 			int cmd_nb);
+//	heredoc_functions.c
+char	*here_doc(char **av);
 
 #endif

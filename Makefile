@@ -6,7 +6,7 @@
 #    By: gpasquet <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/12/16 13:30:55 by gpasquet          #+#    #+#              #
-#    Updated: 2023/01/09 16:42:06 by gpasquet         ###   ########.fr        #
+#    Updated: 2023/01/10 14:56:13 by gpasquet         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -32,7 +32,8 @@ BONUS = bonus/src/pipex_bonus.c \
 		bonus/src/free_functions_bonus.c \
 		bonus/src/struct_utils_bonus.c \
 		bonus/src/child_functions_bonus.c \
-		bonus/src/error_functions.c
+		bonus/src/error_functions.c \
+		bonus/src/heredoc_functions.c \
 
 OBJS = ${SRC:.c=.o}
 

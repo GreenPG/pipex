@@ -6,7 +6,7 @@
 /*   By: gpasquet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/18 12:27:03 by gpasquet          #+#    #+#             */
-/*   Updated: 2023/01/09 13:28:34 by gpasquet         ###   ########.fr       */
+/*   Updated: 2023/01/10 11:30:46 by gpasquet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,12 @@ void	free_tab(char **str_tab)
 void	free_struct(t_input *input)
 {
 	if (input->file1)
-		free(input->file1);
+	{
+		if (input->file1[0] == '.')
+			unlink(input->file1);
+		else
+			free(input->file1);
+	}
 	if (input->file2)
 		free(input->file2);
 	if (input->args)

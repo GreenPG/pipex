@@ -6,12 +6,11 @@
 /*   By: gpasquet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/18 11:57:37 by gpasquet          #+#    #+#             */
-/*   Updated: 2023/01/05 13:41:17 by gpasquet         ###   ########.fr       */
+/*   Updated: 2023/01/10 09:45:18 by gpasquet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/pipex.h"
-#include <stdlib.h>
 
 int	init_pipe(int *pipefd, t_input *input)
 {

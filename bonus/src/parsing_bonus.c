@@ -6,20 +6,24 @@
 /*   By: gpasquet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/18 12:04:26 by gpasquet          #+#    #+#             */
-/*   Updated: 2023/01/09 15:15:29 by gpasquet         ###   ########.fr       */
+/*   Updated: 2023/01/10 10:31:29 by gpasquet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/pipex_bonus.h"
-#include <stdlib.h>
-#include <unistd.h>
 
 t_input	*parsing(char **av, char *const *envp)
 {
 	t_input	*input;
 
 	input = init_struct();
-	input->file1 = ft_strdup(av[0]);
+	if (ft_strncmp(av[0], "here_doc", ft_strlen(av[0])) == 0)
+	{
+		input->file1 = here_doc(av);
+		av += 1;
+	}
+	else
+		input->file1 = ft_strdup(av[0]);
 	input->file2 = ft_strdup(av[strtab_len(av) - 1]);
 	input->args = parse_args(input, av);
 	input->cmd = parse_cmd(input, av, envp);

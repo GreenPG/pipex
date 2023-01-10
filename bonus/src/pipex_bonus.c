@@ -6,7 +6,7 @@
 /*   By: gpasquet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/18 11:57:37 by gpasquet          #+#    #+#             */
-/*   Updated: 2023/01/09 15:24:51 by gpasquet         ###   ########.fr       */
+/*   Updated: 2023/01/10 13:36:04 by gpasquet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -87,7 +87,7 @@ int	main(int ac, char **av, char *const *envp)
 {
 	t_input	*input;
 
-	if (ac < 5)
+	if (check_param_nb(ac, av) < 0)
 	{
 		write(2, "pipex: incorrect number of arguments\n", 37);
 		return (EXIT_FAILURE);

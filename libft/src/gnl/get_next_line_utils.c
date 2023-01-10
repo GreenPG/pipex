@@ -6,13 +6,14 @@
 /*   By: gpasquet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/13 20:32:41 by gpasquet          #+#    #+#             */
-/*   Updated: 2022/12/16 10:55:35 by gpasquet         ###   ########.fr       */
+/*   Updated: 2023/01/10 15:10:00 by gpasquet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../include/get_next_line.h"
 
-void	ft_strjoin_cat(char *dst, const char *src, size_t len, size_t dst_end)
+static void	ft_strjoin_cat(char *dst, const char *src, size_t len,
+		size_t dst_end)
 {
 	int	j;
 

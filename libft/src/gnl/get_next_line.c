@@ -6,7 +6,7 @@
 /*   By: gpasquet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/10/13 18:44:24 by gpasquet          #+#    #+#             */
-/*   Updated: 2022/12/16 10:55:02 by gpasquet         ###   ########.fr       */
+/*   Updated: 2023/01/10 15:05:01 by gpasquet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,11 +122,10 @@ char	*get_next_line(int fd)
 		return (NULL);
 	}
 	line = boo_while(fd, buf, line);
-	if (!line)
+	if (!line || fd == 0)
 	{
 		free(buf[fd]);
 		buf[fd] = NULL;
-		return (line);
 	}
 	return (line);
 }

@@ -1,35 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   utils_bonus.c                                      :+:      :+:    :+:   */
+/*   heredoc_functions.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: gpasquet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2022/12/18 12:19:38 by gpasquet          #+#    #+#             */
-/*   Updated: 2023/01/10 13:37:23 by gpasquet         ###   ########.fr       */
+/*   Created: 2023/01/10 09:56:12 by gpasquet          #+#    #+#             */
+/*   Updated: 2023/01/10 17:07:38 by gpasquet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/pipex_bonus.h"
 
-size_t	strtab_len(char **str_tab)
+char	*here_doc(char **av)
 {
-	int	i;
+	char	*tmp;
+	int		fd;
 
-	i = 0;
-	while (str_tab[i])
-		i++;
-	return (i);
-}
-
-int	check_param_nb(int ac, char **av)
-{
-	if (ac < 5)
-		return (-1);
-	if (ft_strncmp(av[1], "here_doc", ft_strlen(av[1])) == 0)
+	fd = open(".here_doc.tmp", O_WRONLY | O_CREAT, 0666);
+	if (fd == -1)
+		return (NULL);
+	tmp = "";
+	while (ft_strncmp(tmp, av[1], ft_strlen(av[1])) != 0)
 	{
-		if (ac < 6)
-			return (-1);
+		if (tmp[0] != '\0')
+			free(tmp);
+		tmp = get_next_line(0);
+		if (ft_strncmp(tmp, av[1], ft_strlen(av[1])) != 0)
+			ft_putstr_fd(tmp, fd);
 	}
-	return (0);
+	free(tmp);
+	close(fd);
+	return (".here_doc.tmp");
 }
