@@ -6,30 +6,33 @@
 /*   By: gpasquet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/10 09:56:12 by gpasquet          #+#    #+#             */
-/*   Updated: 2023/01/10 17:07:38 by gpasquet         ###   ########.fr       */
+/*   Updated: 2023/01/11 15:43:50 by gpasquet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/pipex_bonus.h"
+#include <stdlib.h>
 
-char	*here_doc(char **av)
+void	here_doc(char **av, int pipefd[2])
 {
 	char	*tmp;
-	int		fd;
+	char	*limiter;
 
-	fd = open(".here_doc.tmp", O_WRONLY | O_CREAT, 0666);
-	if (fd == -1)
-		return (NULL);
+	tmp = ft_strdup(av[2]);
+	limiter = ft_strjoin(tmp, "\n");
+	if (!limiter)
+		exit(EXIT_FAILURE);
+	free(tmp);
 	tmp = "";
-	while (ft_strncmp(tmp, av[1], ft_strlen(av[1])) != 0)
+	while (tmp[0] == '\0' || ft_strncmp(tmp, limiter, ft_strlen(limiter)) != 0)
 	{
+		ft_putstr_fd(">", 1);
 		if (tmp[0] != '\0')
 			free(tmp);
 		tmp = get_next_line(0);
-		if (ft_strncmp(tmp, av[1], ft_strlen(av[1])) != 0)
-			ft_putstr_fd(tmp, fd);
+		if (ft_strncmp(tmp, limiter, ft_strlen(limiter)) != 0)
+			ft_putstr_fd(tmp, pipefd[1]);
 	}
+	free(limiter);
 	free(tmp);
-	close(fd);
-	return (".here_doc.tmp");
 }

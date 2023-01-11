@@ -6,7 +6,7 @@
 #    By: gpasquet <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/12/16 13:30:55 by gpasquet          #+#    #+#              #
-#    Updated: 2023/01/10 14:56:13 by gpasquet         ###   ########.fr        #
+#    Updated: 2023/01/11 10:18:23 by gpasquet         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,6 +15,8 @@ CC = clang
 CFLAGS = -g -Wall -Wextra -Werror
 
 NAME = pipex
+
+BNAME = pipex_bonus
 
 LIBFT = libft/libft.a
 
@@ -51,7 +53,7 @@ ${LIBFT}:
 	make -C libft
 
 bonus:	$(LIBFT) $(OBJS_BONUS)
-	${CC} ${CFLAGS} ${OBJS_BONUS} ${LIBFT} -o ${NAME}
+	${CC} ${CFLAGS} ${OBJS_BONUS} ${LIBFT} -o ${BNAME}
 
 
 clean:

@@ -6,7 +6,7 @@
 /*   By: gpasquet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/18 12:04:26 by gpasquet          #+#    #+#             */
-/*   Updated: 2023/01/10 10:31:29 by gpasquet         ###   ########.fr       */
+/*   Updated: 2023/01/11 15:15:24 by gpasquet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ t_input	*parsing(char **av, char *const *envp)
 	input = init_struct();
 	if (ft_strncmp(av[0], "here_doc", ft_strlen(av[0])) == 0)
 	{
-		input->file1 = here_doc(av);
+		input->file1 = NULL;
 		av += 1;
 	}
 	else

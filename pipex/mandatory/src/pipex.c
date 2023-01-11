@@ -6,7 +6,7 @@
 /*   By: gpasquet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/18 11:57:37 by gpasquet          #+#    #+#             */
-/*   Updated: 2023/01/10 09:45:18 by gpasquet         ###   ########.fr       */
+/*   Updated: 2023/01/11 12:41:40 by gpasquet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ int	main(int ac, char **av, char *const *envp)
 	}
 	pid[0] = init_pipe(pipefd, input);
 	if (pid[0] == -1)
-		error_function(input, NULL);
+		error_function(input, "Pipe");
 	if (pid[0] == 0)
 		first_cmd(input, pipefd, envp);
 	else

@@ -1,68 +1,76 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pipex.h                                            :+:      :+:    :+:   */
+/*   pipex_bonus.h                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: gpasquet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/18 11:58:48 by gpasquet          #+#    #+#             */
-/*   Updated: 2023/01/09 16:26:06 by gpasquet         ###   ########.fr       */
+/*   Updated: 2023/01/11 15:30:46 by gpasquet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PIPEX_H
-# define PIPEX_H
+#ifndef PIPEX_BONUS_H
+# define PIPEX_BONUS_H
 
 # include <unistd.h>
 # include "../../libft/include/libft.h"
+# include "../../libft/include/get_next_line.h"
 # include <sys/wait.h>
 # include <errno.h>
 # include <stdio.h>
 # include <stdlib.h>
 # include <fcntl.h>
+# include <string.h>
 
 typedef struct s_input {
 	char	*file1;
 	char	*file2;
-	char	*cmd1;
-	char	*cmd2;
-	char	**args1;
-	char	**args2;
+	char	**cmd;
+	char	***args;
 }	t_input;
 
-//	pipex.c
+//	pipex_bonus.c
 int		main(int ac, char **av, char *const *envp);
-int		init_pipe(int *pipefd, t_input *input);
+void	init_pipe(char **av, t_input *input, int cmd_nb, char *const *envp);
 void	parent_process(int *pipefd, t_input *input, char *const *envp,
-			int *pid);
+			int cmd_nb);
+void	cmds_loop(t_input *input, int pipesfd[2][2], char	*const	*envp,
+			int cmd_nb);
 
-//	parsing.c
+//	parsing_bonus.c
 t_input	*parsing(char **av, char *const *envp);
-char	*get_cmds(char *av, char *const *envp);
-char	**get_paths(char *const *envp);
+char	***parse_args(t_input *input, char **av);
+char	**parse_cmd(t_input *input, char **av, char *const *envp);
 char	**get_splitted_envp(char *const *envp);
 
-//	utils.c
+//	utils_bonus.c
 size_t	strtab_len(char **tab_str);
-void	infile_error(t_input *input, int pipefd[2]);
+int		check_param_nb(int ac, char **av);
 
 //	error_functions.c
-void	open_error(t_input *input);
+void	open_error(t_input *input, int cmd_nb);
 void	error_function(t_input *input, char *message);
-void	no_file_function(t_input *input);
-void	no_permission_function(t_input *input);
+void	no_file_function(t_input *input, int cmd_nb);
+void	no_permission_function(t_input *input, int cmd_nb);
 void	command_error(t_input *input, int cmd_nb);
 
-//	free_functions.c
+//	free_functions_bonus.c
 void	free_tab(char **str_tab);
 void	free_struct(t_input *input);
 void	free_tab_tab(char ***tab_tab);
 
-//	strcut_utils.c
+//	strcut_utils_bonus.c
 t_input	*init_struct(void);
+char	*get_cmds(char *av, char *const *envp);
+char	**get_paths(char *const *envp);
 
-//	child_functions.c
-void	first_cmd(t_input *input, int *pipefd, char *const *envp);
-void	second_cmd(t_input *input, int *pipefd, char *const *envp);
+//	child_functions_bonus.c
+void	first_cmd(t_input *input, int pipefd[2][2], char *const *envp);
+void	last_cmd(t_input *input, int *pipefd, char *const *envp, int cmd_nb);
+void	child_cmd(t_input *input, int pipesfd[2][2], char *const *envp,
+			int cmd_nb);
+//	heredoc_functions.c
+void	here_doc(char **av, int pipefd[2]);
 
 #endif
