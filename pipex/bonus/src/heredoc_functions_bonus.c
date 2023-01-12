@@ -1,17 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   heredoc_functions.c                                :+:      :+:    :+:   */
+/*   heredoc_functions_bonus.c                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: gpasquet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/10 09:56:12 by gpasquet          #+#    #+#             */
-/*   Updated: 2023/01/11 15:43:50 by gpasquet         ###   ########.fr       */
+/*   Updated: 2023/01/12 13:01:37 by gpasquet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/pipex_bonus.h"
-#include <stdlib.h>
 
 void	here_doc(char **av, int pipefd[2])
 {

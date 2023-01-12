@@ -6,27 +6,14 @@
 /*   By: gpasquet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/18 11:57:37 by gpasquet          #+#    #+#             */
-/*   Updated: 2023/01/11 12:41:40 by gpasquet         ###   ########.fr       */
+/*   Updated: 2023/01/12 11:41:45 by gpasquet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/pipex.h"
 
-int	init_pipe(int *pipefd, t_input *input)
-{
-	int	err;
-	int	pid;
-
-	err = pipe(pipefd);
-	if (err == -1)
-		error_function(input, "Pipe");
-	pid = fork();
-	if (pid == -1)
-		error_function(input, "Fork");
-	return (pid);
-}
-
-void	parent_process(int *pipefd, t_input *input, char *const *envp, int *pid)
+static void	parent_process(int *pipefd, t_input *input, char *const *envp,
+			int *pid)
 {
 	int	status;
 
@@ -45,6 +32,20 @@ void	parent_process(int *pipefd, t_input *input, char *const *envp, int *pid)
 			status = WEXITSTATUS(status);
 		exit(status);
 	}
+}
+
+static int	init_pipe(int *pipefd, t_input *input)
+{
+	int	err;
+	int	pid;
+
+	err = pipe(pipefd);
+	if (err == -1)
+		error_function(input, "Pipe");
+	pid = fork();
+	if (pid == -1)
+		error_function(input, "Fork");
+	return (pid);
 }
 
 int	main(int ac, char **av, char *const *envp)

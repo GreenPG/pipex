@@ -6,56 +6,29 @@
 /*   By: gpasquet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/18 12:04:26 by gpasquet          #+#    #+#             */
-/*   Updated: 2023/01/09 16:06:01 by gpasquet         ###   ########.fr       */
+/*   Updated: 2023/01/12 15:29:34 by gpasquet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/pipex.h"
 
-t_input	*parsing(char **av, char *const *envp)
+static char	**get_splitted_envp(char *const *envp)
 {
-	t_input	*input;
-
-	input = init_struct();
-	input->file1 = ft_strdup(av[0]);
-	input->file2 = ft_strdup(av[3]);
-	input->args1 = ft_split(av[1], ' ');
-	input->args2 = ft_split(av[2], ' ');
-	if (input->args1[0][0] == '/')
-		input->cmd1 = ft_strdup(input->args1[0]);
-	else
-		input->cmd1 = get_cmds(input->args1[0], envp);
-	if (input->args2[0][0] == '/')
-		input->cmd2 = ft_strdup(input->args2[0]);
-	else
-		input->cmd2 = get_cmds(input->args2[0], envp);
-	return (input);
-}
-
-char	*get_cmds(char *av, char *const *envp)
-{
-	char	**paths;
-	char	*cmd;
 	int		i;
+	char	**splitted_envp;
 
-	paths = get_paths(envp);
 	i = 0;
-	while (paths[i])
+	while (envp[i])
 	{
-		cmd = ft_strjoin(paths[i], av);
-		if (access(cmd, X_OK) == 0)
-		{
-			free_tab(paths);
-			return (cmd);
-		}
-		free(cmd);
+		if (ft_strncmp(envp[i], "PATH", 4) == 0)
+			break ;
 		i++;
 	}
-	free_tab(paths);
-	return (NULL);
+	splitted_envp = ft_split(envp[i] + 5, ':');
+	return (splitted_envp);
 }
 
-char	**get_paths(char *const *envp)
+static char	**get_paths(char *const *envp)
 {
 	int		i;
 	char	**paths;
@@ -81,18 +54,49 @@ char	**get_paths(char *const *envp)
 	return (paths);
 }
 
-char	**get_splitted_envp(char *const *envp)
+static char	*get_cmds(char *av, char *const *envp)
 {
+	char	**paths;
+	char	*cmd;
 	int		i;
-	char	**splitted_envp;
 
+	paths = get_paths(envp);
 	i = 0;
-	while (envp[i])
+	while (paths[i])
 	{
-		if (ft_strncmp(envp[i], "PATH", 4) == 0)
-			break ;
+		cmd = ft_strjoin(paths[i], av);
+		if (access(cmd, X_OK) == 0)
+		{
+			free_tab(paths);
+			return (cmd);
+		}
+		free(cmd);
 		i++;
 	}
-	splitted_envp = ft_split(envp[i] + 5, ':');
-	return (splitted_envp);
+	free_tab(paths);
+	return (NULL);
+}
+
+t_input	*parsing(char **av, char *const *envp)
+{
+	t_input	*input;
+
+	input = init_struct();
+	input->file1 = ft_strdup(av[0]);
+	input->file2 = ft_strdup(av[3]);
+	input->args1 = ft_split(av[1], ' ');
+	input->args2 = ft_split(av[2], ' ');
+	if (!input->args1[0])
+		input->cmd1 = ft_strdup("NULL");
+	else if (input->args1[0][0] == '/')
+		input->cmd1 = ft_strdup(input->args1[0]);
+	else
+		input->cmd1 = get_cmds(input->args1[0], envp);
+	if (!input->args2[0])
+		input->cmd2 = ft_strdup("NULL");
+	else if (input->args2[0][0] == '/')
+		input->cmd2 = ft_strdup(input->args2[0]);
+	else
+		input->cmd2 = get_cmds(input->args2[0], envp);
+	return (input);
 }

@@ -6,11 +6,12 @@
 /*   By: gpasquet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/18 12:27:03 by gpasquet          #+#    #+#             */
-/*   Updated: 2022/12/21 15:58:39 by gpasquet         ###   ########.fr       */
+/*   Updated: 2023/01/12 14:51:56 by gpasquet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/pipex.h"
+#include <stdlib.h>
 
 void	free_tab(char **str_tab)
 {

@@ -6,7 +6,7 @@
 #    By: gpasquet <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/12/16 13:30:55 by gpasquet          #+#    #+#              #
-#    Updated: 2023/01/11 10:18:23 by gpasquet         ###   ########.fr        #
+#    Updated: 2023/01/12 14:46:55 by gpasquet         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -34,8 +34,8 @@ BONUS = bonus/src/pipex_bonus.c \
 		bonus/src/free_functions_bonus.c \
 		bonus/src/struct_utils_bonus.c \
 		bonus/src/child_functions_bonus.c \
-		bonus/src/error_functions.c \
-		bonus/src/heredoc_functions.c \
+		bonus/src/error_functions_bonus.c \
+		bonus/src/heredoc_functions_bonus.c 
 
 OBJS = ${SRC:.c=.o}
 
@@ -52,16 +52,17 @@ $(NAME):	$(LIBFT) $(OBJS)
 ${LIBFT}:
 	make -C libft
 
-bonus:	$(LIBFT) $(OBJS_BONUS)
-	${CC} ${CFLAGS} ${OBJS_BONUS} ${LIBFT} -o ${BNAME}
+bonus:	 $(BNAME) 
 
+$(BNAME): $(LIBFT) $(OBJS_BONUS)
+	${CC} ${CFLAGS} ${OBJS_BONUS} ${LIBFT} -o ${BNAME}
 
 clean:
 	${RM} ${OBJS} ${OBJS_BONUS}
 	make clean -C libft
 
 fclean: clean
-	${RM} ${NAME}
+	${RM} ${NAME} ${BNAME}
 	make fclean -C libft
 
 re: fclean all

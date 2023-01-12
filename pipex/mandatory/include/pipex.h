@@ -6,7 +6,7 @@
 /*   By: gpasquet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/18 11:58:48 by gpasquet          #+#    #+#             */
-/*   Updated: 2023/01/11 11:25:29 by gpasquet         ###   ########.fr       */
+/*   Updated: 2023/01/12 14:49:46 by gpasquet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,15 +32,9 @@ typedef struct s_input {
 
 //	pipex.c
 int		main(int ac, char **av, char *const *envp);
-int		init_pipe(int *pipefd, t_input *input);
-void	parent_process(int *pipefd, t_input *input, char *const *envp,
-			int *pid);
 
 //	parsing.c
 t_input	*parsing(char **av, char *const *envp);
-char	*get_cmds(char *av, char *const *envp);
-char	**get_paths(char *const *envp);
-char	**get_splitted_envp(char *const *envp);
 
 //	utils.c
 size_t	strtab_len(char **tab_str);
@@ -54,8 +48,9 @@ void	no_permission_function(t_input *input, int cmd_nb);
 void	command_error(t_input *input, int cmd_nb);
 
 //	free_functions.c
-void	free_tab(char **str_tab);
 void	free_struct(t_input *input);
+void	free_tab(char **str_tab);
+void	free_cmds(char **str_tab, int cmd_nb);
 void	free_tab_tab(char ***tab_tab);
 
 //	strcut_utils.c

@@ -6,7 +6,7 @@
 /*   By: gpasquet <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/12/18 12:27:03 by gpasquet          #+#    #+#             */
-/*   Updated: 2023/01/11 15:08:23 by gpasquet         ###   ########.fr       */
+/*   Updated: 2023/01/12 14:26:15 by gpasquet         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,10 +19,25 @@ void	free_tab(char **str_tab)
 	i = 0;
 	while (str_tab[i])
 	{
-		free(str_tab[i]);
+		if (str_tab[i])
+			free(str_tab[i]);
 		i++;
 	}
 	free(str_tab);
+}
+
+void	free_cmds(char **cmd_tab, int cmd_nb)
+{
+	int	i;
+
+	i = 0;
+	while (i <= cmd_nb)
+	{
+		if (cmd_tab[i])
+			free(cmd_tab[i]);
+		i++;
+	}
+	free(cmd_tab);
 }
 
 void	free_struct(t_input *input)
@@ -34,7 +49,7 @@ void	free_struct(t_input *input)
 	if (input->args)
 		free_tab_tab(input->args);
 	if (input->cmd)
-		free_tab(input->cmd);
+		free_cmds(input->cmd, input->cmd_nbs);
 	free(input);
 }
 
